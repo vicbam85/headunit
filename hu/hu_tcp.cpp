@@ -15,6 +15,7 @@
 
   #include <netinet/in.h>
   #include <netdb.h>
+  #include <arpa/inet.h>
 
   HUTransportStreamTCP::~HUTransportStreamTCP()
   {
@@ -96,7 +97,7 @@
       }
     }
     else {
-      cli_addr.sin_addr.s_addr = htonl (INADDR_LOOPBACK);
+      cli_addr.sin_addr.s_addr = inet_addr("192.168.43.1");
       cli_addr.sin_family = AF_INET;
       cli_addr.sin_port = htons (5277);
       //logd ("cli_len: %d  fam: %d  addr: 0x%x  port: %d",cli_len,cli_addr.sin_family, ntohl (cli_addr.sin_addr.s_addr), ntohs (cli_addr.sin_port));

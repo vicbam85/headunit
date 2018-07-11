@@ -201,7 +201,7 @@ int main (int argc, char *argv[])
             commandCallbacks.eventCallbacks = &callbacks;
 
             //Wait forever for a connection
-            int ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::USB, true);
+	    int ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::WIFI, true);
             if (ret < 0) {
                 loge("Something bad happened");
                 continue;

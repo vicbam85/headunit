@@ -59,7 +59,7 @@ $(TOP)/hu/generated.arm/hu.pb.cc $(TOP)/hu/generated.arm/hu.pb.h: $(TOP)/hu/hu.p
 	$(PROTOTOOLCHAIN)/bin/protoc $< --proto_path=$(TOP)/hu/ --cpp_out=$(TOP)/hu/generated.arm/
 
 dbus/generated_cmu.h: dbus/cmu_interfaces.xml
-	cd dbus ; dbusxx-xml2cpp cmu_interfaces.xml --proxy=generated_cmu.h
+	cd dbus ; ./dbusxx-xml2cpp cmu_interfaces.xml --proxy=generated_cmu.h
 
 %.arm.o : %.c
 	$(CC) -MD -g $(CFLAGS) $(INCLUDES) -c $<  -o $@

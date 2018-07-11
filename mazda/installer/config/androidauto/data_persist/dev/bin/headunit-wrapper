@@ -5,6 +5,37 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 export LD_LIBRARY_PATH="${SCRIPTPATH}/headunit_libs:/jci/lib:/jci/opera/3rdpartylibs/freetype:/usr/lib/imx-mm/audio-codec:/usr/lib/imx-mm/parser:/data_persist/dev/lib:"
 #override some GST plugins with these
-export GST_PLUGIN_PATH="${SCRIPTPATH}/headunit_libs"
+export GST_PLUGIN_PATH="${SCRIPTPATH}/headunit_libs:/usr/lib/gstreamer-0.10"
 
-taskset 0xFFFFFFFF "${SCRIPTPATH}/headunit" "$@" 2>&1 | tee /tmp/mnt/data/headunit.log
+
+while [ true ]; do
+ #Check online
+ count=`ip route|grep default|grep wlan0|wc -l`
+ if [ $count -ge 1 ]; then
+  touch /tmp/root/online.status
+  stable_count=$(( $stable_count + 1 ))
+  if [ $stable_count -gt $stable_threshold ]; then
+   touch /tmp/root/online-stable.status
+   stable_count=$(( $stable_threshold + 1 ))
+  fi
+ else
+  stable_count=0
+  rm -f /tmp/root/online.status
+  rm -f /tmp/root/online-stable.status
+ fi
+ # Check personal hotspot
+ android_netcheck=`netstat -rn|awk '$2=="192.168.43.1" {print}'|wc -l`
+ if [ -e /tmp/root/online.status ]&&[ $android_netcheck == 1 ]; then
+  if ! [ -e /tmp/root/headunit.status ]; then
+   taskset 0xFFFFFFFF "${SCRIPTPATH}/headunit" "$@" 2>&1 | tee /tmp/mnt/data/headunit.log
+   touch /tmp/root/headunit.status
+   echo "First start"
+  fi
+ else
+  killall headunit ||true
+  rm -f /tmp/root/headunit.status
+  RAND=`expr $RANDOM % 10`
+  echo "go sleep $RAND"
+  sleep $RAND
+ fi
+done

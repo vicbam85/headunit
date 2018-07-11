@@ -91,7 +91,7 @@ main(int argc, char *argv[]) {
             HUServer headunit(callbacks);
 
             /* Start AA processing */
-            ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::USB, true);
+            ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::WIFI, true);
             if (ret < 0) {
                     printf("Phone is not connected. Connect a supported phone and restart.\n");
                     return 0;
