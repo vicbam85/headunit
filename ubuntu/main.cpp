@@ -14,6 +14,9 @@
 #include "outputs.h"
 #include "callbacks.h"
 
+#include "json/json.hpp"
+using json = nlohmann::json;
+
 gst_app_t gst_app;
 
 float g_dpi_scalefactor = 1.0f;
@@ -84,14 +87,39 @@ main(int argc, char *argv[]) {
             loge("Command server failed to start");
         }
 
-        //loop to emulate the caar
+        //default settings
+        bool launchOnDevice = true;
+        bool carGPS = true;
+        HU_TRANSPORT_TYPE transport_type = HU_TRANSPORT_TYPE::USB;
+
+        std::ifstream ifs("headunit.json");
+        //config file exists, read it
+        if(ifs.good())
+        {
+            json config(ifs);
+
+            if (config["launchOnDevice"].is_boolean())
+            {
+                launchOnDevice = config["launchOnDevice"];
+            }
+            if (config["carGPS"].is_boolean())
+            {
+                carGPS = config["carGPS"];
+            }
+            if (config["wifiTransport"].is_boolean())
+            {
+                transport_type = config["wifiTransport"] ? HU_TRANSPORT_TYPE::WIFI : HU_TRANSPORT_TYPE::USB;
+            }
+        }
+
+        //loop to emulate the car
         while(true)
         {
             DesktopEventCallbacks callbacks;
             HUServer headunit(callbacks);
 
             /* Start AA processing */
-            ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::WIFI, true);
+            ret = headunit.hu_aap_start(transport_type, true);
             if (ret < 0) {
                     printf("Phone is not connected. Connect a supported phone and restart.\n");
                     return 0;
@@ -102,7 +130,7 @@ main(int argc, char *argv[]) {
             g_hu = &headunit.GetAnyThreadInterface();
             commandCallbacks.eventCallbacks = &callbacks;
 
-              /* Start gstreamer pipeline and main loop */
+            /* Start gstreamer pipeline and main loop */
             ret = gst_loop(app);
             if (ret < 0) {
                     printf("STATUS:gst_loop() ret: %d\n", ret);
