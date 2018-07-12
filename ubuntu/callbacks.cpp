@@ -165,3 +165,8 @@ std::string DesktopCommandServerCallbacks::GetLogPath() const
     //no log
     return std::string();
 }
+
+std::string DesktopCommandServerCallbacks::GetVersion() const
+{
+    return HEADUNIT_VERSION;
+}

@@ -163,6 +163,7 @@ int main (int argc, char *argv[])
     {
         MazdaCommandServerCallbacks commandCallbacks;
         CommandServer commandServer(commandCallbacks);
+        printf("headunit version: %s \n", commandCallbacks.GetVersion().c_str());
         if (!commandServer.Start())
         {
             loge("Command server failed to start");

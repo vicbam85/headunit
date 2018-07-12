@@ -26,6 +26,7 @@ CommandServer::CommandServer(ICommandServerCallbacks &callbacks)
        std::string logPath = callbacks.GetLogPath();
        if (logPath.length() > 0)
          result["logPath"] = logPath;
+       result["headunitVersion"] = callbacks.GetVersion();
 
        resp.body << std::setw(4) << result;
 

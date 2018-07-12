@@ -29,7 +29,10 @@ APP = headunit
 
 .PHONY: clean
 
-all: proto $(APP)
+all: tag proto $(APP)
+
+tag:
+	echo "#define HEADUNIT_VERSION \"`git describe --tag`\"" > version.h
 
 proto: $(TOP)/hu/generated.x64/hu.pb.cc
 
@@ -49,7 +52,7 @@ $(TOP)/hu/generated.x64/hu.pb.cc $(TOP)/hu/generated.x64/hu.pb.h: $(TOP)/hu/hu.p
 	$(CXX) -MD $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
-	rm -f $(TOP)/hu/generated.x64/* $(OBJS) $(DEPS) *~ $(APP)
+	rm -f $(TOP)/hu/generated.x64/* $(OBJS) $(DEPS) *~ $(APP) version.h
 
 -include $(DEPS)
 

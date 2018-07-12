@@ -294,6 +294,11 @@ std::string MazdaCommandServerCallbacks::GetLogPath() const
     return "/tmp/mnt/data/headunit.log";
 }
 
+std::string MazdaCommandServerCallbacks::GetVersion() const
+{
+    return HEADUNIT_VERSION;
+}
+
 void AudioManagerClient::aaRegisterStream()
 {
     // First open a new Stream
