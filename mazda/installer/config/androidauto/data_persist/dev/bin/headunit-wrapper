@@ -37,18 +37,21 @@ while [ true ]; do
  
  #AA-Wifi
  if [ -e /tmp/root/online.status ]&&[ $android_netcheck == 1 ]; then
-  if ! [ -e /tmp/root/headunit.status ]; then
+  if ! [ -e /tmp/root/headunit-wireless.status ]; then
    sed -i 's."wifiTransport": false."wifiTransport": true.g' /tmp/root/headunit.json 
    taskset 0xFFFFFFFF "${SCRIPTPATH}/headunit" "$@" 2>&1 | tee /tmp/mnt/data/headunit.log
-   touch /tmp/root/headunit.status
+   touch /tmp/root/headunit-wireless.status
+   rm -f  /tmp/root/headunit.status
    echo "First start"
   fi
  else ## AA-USB
   killall headunit ||true
-  rm -f /tmp/root/headunit.status
-  sed -i 's."wifiTransport": true."wifiTransport": false.g' /tmp/root/headunit.json 
-  taskset 0xFFFFFFFF "${SCRIPTPATH}/headunit" "$@" 2>&1 | tee /tmp/mnt/data/headunit.log
-  touch /tmp/root/headunit.status
+  if ! [ -e /tmp/root/headunit.status ]; then
+   sed -i 's."wifiTransport": true."wifiTransport": false.g' /tmp/root/headunit.json 
+   taskset 0xFFFFFFFF "${SCRIPTPATH}/headunit" "$@" 2>&1 | tee /tmp/mnt/data/headunit.log
+   touch /tmp/root/headunit.status
+   rm -f /tmp/root/headunit-wireless.status
+  fi
  fi
  RAND=`expr $RANDOM % 5`
  echo "go sleep $RAND"
