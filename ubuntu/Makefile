@@ -22,6 +22,7 @@ SRCS += bt/ub_bluetooth.cpp
 SRCS += main.cpp
 SRCS += outputs.cpp
 SRCS += callbacks.cpp
+SRCS += $(TOP)/common/config.cpp
 
 OBJS = $(addsuffix .x64.o, $(basename $(SRCS)))
 DEPS = $(addsuffix .x64.d, $(basename $(SRCS)))
