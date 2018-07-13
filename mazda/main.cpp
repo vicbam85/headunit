@@ -166,6 +166,8 @@ int main (int argc, char *argv[])
 
     gst_init(&argc, &argv);
 
+    int ret;
+
     try
     {
         MazdaCommandServerCallbacks commandCallbacks;
@@ -210,7 +212,7 @@ int main (int argc, char *argv[])
             commandCallbacks.eventCallbacks = &callbacks;
 
             //Wait forever for a connection
-	    int ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::WIFI, true);
+            ret = headunit.hu_aap_start(config::transport_type, true);
             if (ret < 0) {
                 loge("Something bad happened");
                 continue;
