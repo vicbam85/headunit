@@ -32,6 +32,12 @@
 #include "callbacks.h"
 #include "glib_utils.h"
 
+#include "json/json.hpp"
+#include "config.h"
+
+using json = nlohmann::json;
+
+
 #define HMI_BUS_ADDRESS "unix:path=/tmp/dbus_hmi_socket"
 #define SERVICE_BUS_ADDRESS "unix:path=/tmp/dbus_service_socket"
 
@@ -88,6 +94,7 @@ static void gps_thread_func(std::condition_variable& quitcv, std::mutex& quitmut
     //Not sure if this is actually required but the built-in Nav code on CMU does it
     mzd_gps2_set_enabled(true);
 
+    config::readConfig();
     while (true)
     {
         if (mzd_gps2_get(newData) && !data.IsSame(newData))
@@ -163,6 +170,7 @@ int main (int argc, char *argv[])
     {
         MazdaCommandServerCallbacks commandCallbacks;
         CommandServer commandServer(commandCallbacks);
+        printf("headunit version: %s \n", commandCallbacks.GetVersion().c_str());
         if (!commandServer.Start())
         {
             loge("Command server failed to start");
@@ -176,6 +184,7 @@ int main (int argc, char *argv[])
             return 0;
         }
 
+	config::readConfig();
         printf("Looping\n");
         while (true)
         {
@@ -201,7 +210,7 @@ int main (int argc, char *argv[])
             commandCallbacks.eventCallbacks = &callbacks;
 
             //Wait forever for a connection
-            int ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::USB, true);
+	    int ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::WIFI, true);
             if (ret < 0) {
                 loge("Something bad happened");
                 continue;
@@ -227,6 +236,7 @@ int main (int argc, char *argv[])
             callbacks.connected = false;
             callbacks.videoFocus = false;
             callbacks.audioFocus = AudioManagerClient::FocusType::NONE;
+            callbacks.inCall = false;
 
             printf("quitting...\n");
             //wake up night mode  and gps polling threads
