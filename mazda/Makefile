@@ -41,6 +41,8 @@ SRCS += outputs.cpp
 SRCS += callbacks.cpp
 SRCS += main.cpp
 
+SRCS += $(TOP)/common/config.cpp
+
 OBJS = $(addsuffix .arm.o, $(basename $(SRCS)))
 DEPS = $(addsuffix .arm.d, $(basename $(SRCS)))
 
