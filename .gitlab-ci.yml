@@ -10,7 +10,6 @@ rspec:
     - sed -i 's/.\/dbusxx-xml2cpp/dbusxx-xml2cpp/g' Makefile
     - make
   artifacts:
+    name: "$CI_COMMIT_REF_NAME"
     untracked: true
-    paths: 
-    - bin/
     expire_in: 1 day
