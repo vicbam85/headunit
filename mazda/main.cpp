@@ -31,6 +31,7 @@
 #include "command_server.h"
 #include "callbacks.h"
 #include "glib_utils.h"
+#include "config.h"
 
 #define HMI_BUS_ADDRESS "unix:path=/tmp/dbus_hmi_socket"
 #define SERVICE_BUS_ADDRESS "unix:path=/tmp/dbus_service_socket"
@@ -90,7 +91,7 @@ static void gps_thread_func(std::condition_variable& quitcv, std::mutex& quitmut
 
     while (true)
     {
-        if (mzd_gps2_get(newData) && !data.IsSame(newData))
+        if (config::carGPS && mzd_gps2_get(newData) && !data.IsSame(newData))
         {
             data = newData;
             timeval tv;
@@ -177,6 +178,8 @@ int main (int argc, char *argv[])
             return 0;
         }
 
+        config::readConfig();
+
         printf("Looping\n");
         while (true)
         {
@@ -202,7 +205,7 @@ int main (int argc, char *argv[])
             commandCallbacks.eventCallbacks = &callbacks;
 
             //Wait forever for a connection
-	    int ret = headunit.hu_aap_start(HU_TRANSPORT_TYPE::WIFI, true);
+            int ret = headunit.hu_aap_start(config::transport_type, true);
             if (ret < 0) {
                 loge("Something bad happened");
                 continue;
