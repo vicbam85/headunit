@@ -1,11 +1,5 @@
-#include <stdio.h>
 #include <fstream>
-
-#include "hu_uti.h"
 #include "hu_aap.h"
-
-//#include "outputs.h"
-
 #include "config.h"
 
 //default settings
@@ -83,4 +77,3 @@ void config::updateConfigBool(std::string parameter, bool value)
         config::parseJson(config_json);
     }
 }
-

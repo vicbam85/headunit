@@ -91,8 +91,6 @@ main(int argc, char *argv[]) {
 
         config::configFile="headunit.json";
         config::readConfig();
-        config::updateConfigBool("WifiTransport_settofalse", false);
-        config::updateConfigString("StringParameter", "what u want");
 
         //loop to emulate the car
         printf("Looping\n");

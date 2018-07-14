@@ -1,0 +1,7 @@
+curl "127.0.0.1:9999/status"
+curl "127.0.0.1:9999/updateConfig?parameter=callbackParamString&value=onestringparamtorulethemall&type=string"
+curl "127.0.0.1:9999/updateConfig?parameter=callbackParamBool_setTo_False&value=false&type=bool"
+curl "127.0.0.1:9999/updateConfig?parameter=callbackParamBool_setTo_True&value=true&type=bool"
+curl "127.0.0.1:9999/updateConfig?parameter=callbackParamBool_setTo_WrongValue&value=wrongValue&type=bool"
+curl "127.0.0.1:9999/updateConfig?parameter=callbackParamBool_setTo_WrongType&value=whatever&type=wrongType"
+curl "127.0.0.1:9999/updateConfig?parameter=carGPS&value=false&type=bool"
