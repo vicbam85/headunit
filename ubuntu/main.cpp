@@ -89,9 +89,13 @@ main(int argc, char *argv[]) {
             loge("Command server failed to start");
         }
 
+        config::configFile="headunit.json";
         config::readConfig();
+        config::updateConfigBool("WifiTransport_settofalse", false);
+        config::updateConfigString("StringParameter", "what u want");
 
         //loop to emulate the car
+        printf("Looping\n");
         while(true)
         {
             DesktopEventCallbacks callbacks;
