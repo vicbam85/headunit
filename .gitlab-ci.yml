@@ -9,3 +9,7 @@ rspec:
     - cd mazda
     - sed -i 's/.\/dbusxx-xml2cpp/dbusxx-xml2cpp/g' Makefile
     - make
+  artifacts:
+    paths: 
+    - bin
+    expire_in: 1 day
