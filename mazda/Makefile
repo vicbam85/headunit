@@ -46,7 +46,10 @@ DEPS = $(addsuffix .arm.d, $(basename $(SRCS)))
 
 APP = headunit
 
-all: proto dbusxx $(APP)
+all: tag proto dbusxx $(APP)
+
+tag:
+	echo "#define HEADUNIT_VERSION \"`git describe --tag`\"" > version.h
 
 proto: $(TOP)/hu/generated.arm/hu.pb.cc
 
@@ -71,7 +74,7 @@ dbus/generated_cmu.h: dbus/cmu_interfaces.xml
 	$(CXX) -MD -g $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
-	rm -f *~ $(TOP)/hu/generated.arm/* dbus/generated_*.* $(OBJS) $(APP) $(DEPS) $(APPLICATION_NAME)_*.zip
+	rm -f *~ $(TOP)/hu/generated.arm/* dbus/generated_*.* $(OBJS) $(APP) $(DEPS) $(APPLICATION_NAME)_*.zip version.h
 
 install: all
 	cp -a -f headunit installer/config/androidauto/data_persist/dev/bin/
