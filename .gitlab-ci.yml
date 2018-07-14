@@ -10,6 +10,7 @@ rspec:
     - sed -i 's/.\/dbusxx-xml2cpp/dbusxx-xml2cpp/g' Makefile
     - make
   artifacts:
+    untracked: true
     paths: 
-    - binaries/
+    - bin/
     expire_in: 1 day
