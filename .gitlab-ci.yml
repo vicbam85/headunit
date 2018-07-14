@@ -11,5 +11,5 @@ rspec:
     - make
   artifacts:
     paths: 
-    - bin
+    - binaries/
     expire_in: 1 day
