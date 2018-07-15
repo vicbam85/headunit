@@ -16,7 +16,8 @@ public:
     static HU_TRANSPORT_TYPE transport_type;
 
 private:
+    static json readConfigFile();
+    static void writeConfigFile(json config_json);
     static void parseJson(json config_json);
-    static void writeConfig(json config_json);
 };
 

@@ -25,55 +25,72 @@ void config::parseJson(json config_json)
     printf("json config parsed\n");
 }
 
-void config::readConfig()
+json config::readConfigFile()
 {
     std::ifstream ifs(config::configFile);
+    json config_json;
     //config file exists, read it
-    if(ifs.good())
+    if (ifs.good())
     {
-        json config_json(ifs);
+        try
+        {
+            ifs >> config_json;
+        }catch (...)
+        {
+            printf("couldn't parse config file. possible corruption\n");
+            config_json = nullptr;
+            ifs.close();
+        }
         ifs.close();
-
-        config::parseJson(config_json);
-        printf("config file read\n");
     }
+    else
+    {
+        printf("couldn't read config file. check permissions\n");
+    }
+    return config_json;
 }
 
-void config::writeConfig(json config_json)
+void config::readConfig()
+{
+    json config_json = readConfigFile();
+    if (config_json == nullptr) return;
+
+    config::parseJson(config_json);
+}
+
+void config::writeConfigFile(json config_json)
 {
     std::ofstream out_file(config::configFile);
-    out_file << std::setw(4) << config_json << std::endl;
-    printf("config file written\n");
+    if (out_file.good())
+    {
+        out_file << std::setw(4) << config_json << std::endl;
+        out_file.close();
+        printf("config file written\n");
+    }
+    else
+    {
+        printf("couldn't write config file. check permissions\n");
+    }
 }
 
 void config::updateConfigString(std::string parameter, std::string value)
 {
-    std::ifstream ifs(config::configFile);
     printf("updating parameter [%s] = [%s]\n", parameter.c_str(), value.c_str());
-    //config file exists, read it
-    if(ifs.good())
-    {
-        json config_json(ifs);
-        ifs.close();
+    json config_json = readConfigFile();
+    if (config_json == nullptr) return;
 
-        config_json[parameter]=value;
-        writeConfig(config_json);
-        config::parseJson(config_json);
-    }
+    config_json[parameter]=value;
+    writeConfigFile(config_json);
+    config::parseJson(config_json);
 }
 
 void config::updateConfigBool(std::string parameter, bool value)
 {
-    std::ifstream ifs(config::configFile);
     printf("updating parameter [%s] = [%s]\n", parameter.c_str(), value ? "true" : "false");
-    //config file exists, read it
-    if(ifs.good())
-    {
-        json config_json(ifs);
-        ifs.close();
+    json config_json = readConfigFile();
+    if (config_json == nullptr) return;
 
-        config_json[parameter]=value;
-        writeConfig(config_json);
-        config::parseJson(config_json);
-    }
+    config_json[parameter]=value;
+    writeConfigFile(config_json);
+    config::parseJson(config_json);
 }
