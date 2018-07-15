@@ -35,6 +35,19 @@ CommandServer::CommandServer(ICommandServerCallbacks &callbacks)
        AddCORSHeaders(resp);
     });
 
+    server.get("/updateConfig", [&callbacks](WPP::Request& req, WPP::Response& resp)
+    {
+       resp.type = "application/json";
+       json result;
+       result["result"]=callbacks.ChangeParameterConfig(req.query["parameter"], req.query["value"], req.query["type"]);
+
+       resp.body << std::setw(4) << result;
+
+       logd("Got /updateConfig call. response:\n%s\n", resp.body.str().c_str());
+
+       AddCORSHeaders(resp);
+    });
+
     server.post("/takeVideoFocus", [&callbacks](WPP::Request& req, WPP::Response& resp)
     {
        resp.type = "application/json";

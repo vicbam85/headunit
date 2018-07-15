@@ -38,8 +38,8 @@ SRCS += gps/mzd_gps.cpp
 SRCS += bt/mzd_bluetooth.cpp
 
 SRCS += outputs.cpp
-SRCS += callbacks.cpp
 SRCS += $(TOP)/common/config.cpp
+SRCS += callbacks.cpp
 SRCS += main.cpp
 
 OBJS = $(addsuffix .arm.o, $(basename $(SRCS)))
