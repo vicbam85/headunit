@@ -31,6 +31,7 @@
 #include "command_server.h"
 #include "callbacks.h"
 #include "glib_utils.h"
+#include "config.h"
 
 #include "json/json.hpp"
 #include "config.h"
@@ -97,7 +98,7 @@ static void gps_thread_func(std::condition_variable& quitcv, std::mutex& quitmut
     config::readConfig();
     while (true)
     {
-	if (config::carGPS && mzd_gps2_get(newData) && !data.IsSame(newData))
+        if (config::carGPS && mzd_gps2_get(newData) && !data.IsSame(newData))
         {
             data = newData;
             timeval tv;
@@ -184,7 +185,7 @@ int main (int argc, char *argv[])
             return 0;
         }
 
-	config::readConfig();
+        config::readConfig();
         printf("Looping\n");
         while (true)
         {

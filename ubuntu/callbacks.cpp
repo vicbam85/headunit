@@ -2,6 +2,7 @@
 #include "outputs.h"
 #include "glib_utils.h"
 #include "bt/ub_bluetooth.h"
+#include "config.h"
 
 DesktopEventCallbacks::DesktopEventCallbacks() :
     connected(false),
@@ -169,4 +170,30 @@ std::string DesktopCommandServerCallbacks::GetLogPath() const
 std::string DesktopCommandServerCallbacks::GetVersion() const
 {
     return HEADUNIT_VERSION;
+}
+
+std::string DesktopCommandServerCallbacks::ChangeParameterConfig(std::string param, std::string value, std::string type) const
+{
+    bool updateHappened = false;
+    if (type == "string")
+    {
+        config::updateConfigString(param, value);
+        updateHappened = true;
+    }
+    if (type == "bool")
+    {
+        if (value == "false")
+        {
+            config::updateConfigBool(param, false);
+            updateHappened = true;
+        }
+        if (value == "true")
+        {
+            config::updateConfigBool(param, true);
+            updateHappened = true;
+        }
+    }
+    if (updateHappened)
+       return "Config updated";
+    return "Config wasn't updated. Wrong parameters.";
 }

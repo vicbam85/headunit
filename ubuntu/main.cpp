@@ -89,9 +89,11 @@ main(int argc, char *argv[]) {
             loge("Command server failed to start");
         }
 
+        config::configFile="headunit.json";
         config::readConfig();
 
         //loop to emulate the car
+        printf("Looping\n");
         while(true)
         {
             DesktopEventCallbacks callbacks;
