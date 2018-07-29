@@ -12,7 +12,7 @@ class HUTransportStreamTCP : public HUTransportStream
 
     int wifi_direct = 0;//0;
     int itcp_deinit ();
-    int itcp_accept (int tmo);
+    int itcp_accept ();
     int itcp_init();
  public:
     ~HUTransportStreamTCP();
