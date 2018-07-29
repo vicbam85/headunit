@@ -78,8 +78,7 @@ clean:
 	rm -f *~ $(TOP)/hu/generated.arm/* dbus/generated_*.* $(OBJS) $(APP) $(DEPS) $(APPLICATION_NAME)_*.zip
 
 install: all
-	cp -a -f headunit installer/config/androidauto/data_persist/dev/bin/
-
+	cp -a -f headunit installer/config/androidauto/data_persist/dev/bin/; cp -a -f headunit.json installer/config/androidauto/data_persist/dev/bin/
 release: install
 	zip -r -FS $(APPLICATION_NAME)_$(APPLICATION_VERSION).zip installer/
 
