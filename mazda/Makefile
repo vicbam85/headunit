@@ -42,8 +42,6 @@ SRCS += $(TOP)/common/config.cpp
 SRCS += callbacks.cpp
 SRCS += main.cpp
 
-SRCS += $(TOP)/common/config.cpp
-
 OBJS = $(addsuffix .arm.o, $(basename $(SRCS)))
 DEPS = $(addsuffix .arm.d, $(basename $(SRCS)))
 
@@ -68,13 +66,13 @@ dbus/generated_cmu.h: dbus/cmu_interfaces.xml
 	cd dbus ; ./dbusxx-xml2cpp cmu_interfaces.xml --proxy=generated_cmu.h
 
 %.arm.o : %.c
-	$(CC) -MD -g $(CFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CC) -Os -s -g $(CFLAGS) $(INCLUDES) -c $<  -o $@
 
 %.arm.o : %.cpp
-	$(CXX) -MD -g $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CXX) -Os -s -g $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
 
 %.arm.o : %.cc
-	$(CXX) -MD -g $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CXX) -Os -s -g $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
 	rm -f *~ $(TOP)/hu/generated.arm/* dbus/generated_*.* $(OBJS) $(APP) $(DEPS) $(APPLICATION_NAME)_*.zip
