@@ -231,7 +231,7 @@ int main (int argc, char *argv[])
             commandCallbacks.eventCallbacks = &callbacks;
 
             //Wait forever for a connection
-            int ret = headunit.hu_aap_start(config::transport_type, config::phoneIpAddress, true);
+            int ret = headunit.hu_aap_start(config::transport_type, config::phoneIpAddress, true, config::rightHandDriver);
             if (ret < 0) {
                 loge("Something bad happened");
                 continue;

@@ -187,7 +187,7 @@ class HUServer : protected IHUConnectionThreadInterface
 {
 public:
   //Must be called from the "main" thread (as defined by the user)
-  int hu_aap_start    (HU_TRANSPORT_TYPE transportType, std::string& phoneIpAddress, bool waitForDevice);
+  int hu_aap_start    (HU_TRANSPORT_TYPE transportType, std::string& phoneIpAddress, bool waitForDevice, bool rightHandDriver);
   int hu_aap_shutdown ();
 
   HUServer(IHUConnectionThreadEventCallbacks& callbacks);
@@ -251,7 +251,7 @@ protected:
   using IHUConnectionThreadInterface::hu_aap_unenc_send_message;
 
   int hu_handle_VersionResponse (int chan, byte * buf, int len);
-  int hu_handle_ServiceDiscoveryRequest (int chan, byte * buf, int len);
+  int hu_handle_ServiceDiscoveryRequest (int chan, byte * buf, int len, bool rightHandDriver);
   int hu_handle_PingRequest (int chan, byte * buf, int len);
   int hu_handle_NavigationFocusRequest (int chan, byte * buf, int len);
   int hu_handle_ShutdownRequest (int chan, byte * buf, int len);

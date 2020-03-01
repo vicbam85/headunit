@@ -9,6 +9,7 @@ bool config::carGPS = true;
 HU_TRANSPORT_TYPE config::transport_type = HU_TRANSPORT_TYPE::USB;
 std::string config::phoneIpAddress = "192.168.43.1";
 bool config::reverseGPS = false;
+bool config::rightHandDriver = false;
 
 void config::parseJson(json config_json)
 {
@@ -31,6 +32,10 @@ void config::parseJson(json config_json)
     if (config_json["reverseGPS"].is_boolean())
     {
         config::reverseGPS = config_json["reverseGPS"];
+    }
+    if (config_json["rightHandDriver"].is_boolean())
+    {
+        config::rightHandDriver = config_json["rightHandDriver"];
     }
     printf("json config parsed\n");
 }

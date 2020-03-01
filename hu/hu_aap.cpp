@@ -28,6 +28,9 @@
 #include "hu_usb.h"
 #include "hu_tcp.h"
 
+//Variable to store the Right Hand Driver value
+bool rhd;
+
   HUServer::HUServer(IHUConnectionThreadEventCallbacks& callbacks)
   : callbacks(callbacks)
   {
@@ -388,7 +391,7 @@
   }
 
 //  extern int wifi_direct;// = 0;//1;//0;
-  int HUServer::hu_handle_ServiceDiscoveryRequest (int chan, byte * buf, int len) {                  // Service Discovery Request
+  int HUServer::hu_handle_ServiceDiscoveryRequest (int chan, byte * buf, int len, bool rightHandDriver) {                  // Service Discovery Request
 
     HU::ServiceDiscoveryRequest request;
     if (!request.ParseFromArray(buf, len))
@@ -401,7 +404,8 @@
     carInfo.set_car_model("Mazda");
     carInfo.set_car_year("2016");
     carInfo.set_car_serial("0001");
-    carInfo.set_driver_pos(true);
+//    carInfo.set_driver_pos(true);
+    carInfo.set_driver_pos(rightHandDriver);
     carInfo.set_headunit_make("Mazda");
     carInfo.set_headunit_model("Connect");
     carInfo.set_sw_build("SWB1");
@@ -1027,7 +1031,7 @@
           case HU_PROTOCOL_MESSAGE::MediaData:
             return hu_handle_MediaData(chan, buf, len);
           case HU_PROTOCOL_MESSAGE::ServiceDiscoveryRequest:
-            return hu_handle_ServiceDiscoveryRequest(chan, buf, len);
+            return hu_handle_ServiceDiscoveryRequest(chan, buf, len, rhd);
           case HU_PROTOCOL_MESSAGE::ChannelOpenRequest:
             return hu_handle_ChannelOpenRequest(chan, buf, len);
           case HU_PROTOCOL_MESSAGE::PingRequest:
@@ -1310,7 +1314,10 @@
 
   static_assert(PIPE_BUF >= sizeof(IHUAnyThreadInterface::HUThreadCommand*), "PIPE_BUF is tool small for a pointer?");
 
-  int HUServer::hu_aap_start (HU_TRANSPORT_TYPE transportType, std::string& phoneIpAddress, bool waitForDevice) {                // Starts Transport/USBACC/OAP, then AA protocol w/ VersReq(1), SSL handshake, Auth Complete
+  int HUServer::hu_aap_start (HU_TRANSPORT_TYPE transportType, std::string& phoneIpAddress, bool waitForDevice, bool rightHandDriver) {                // Starts Transport/USBACC/OAP, then AA protocol w/ VersReq(1), SSL handshake, Auth Complete
+
+    //Support for Left/Right Hand Driver
+    rhd = rightHandDriver;
 
     if (iaap_state == hu_STATE_STARTED || iaap_state == hu_STATE_STARTIN) {
       loge ("CHECK: iaap_state: %d (%s)", iaap_state, state_get (iaap_state));
